@@ -1,0 +1,14 @@
+# dump files
+.stackdump
+
+#folder config file
+Desktop.int
+
+# recycle bin used on file shares
+$RECYCLE.BIN/
+
+#Windows installer files
+*.cab
+*.msi
+*.msm
+*.msp
