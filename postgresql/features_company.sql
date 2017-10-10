@@ -47,12 +47,12 @@ FROM
 			(-- get merch infor
 				SELECT nm_terml, id_merchant_locn, id_merchant_pos 
 				FROM "instoDataAnalyticsDev".cc_raw_dim_merchant_Pos_fake
-				--WHERE nm_terml in ('Ariana Tran', 'Tommy Mcdonald')
-				ORDER BY random()
-				LIMIT 100
+				WHERE nm_terml in ('Kimberly Bartlett DDS', 'Gary Phillips')
+				--ORDER BY random()
+				--LIMIT 100
 			)merch_pos
 			INNER JOIN "instoDataAnalyticsDev".cc_raw_fct_base_card_fake txn
-			ON merch_pos.id_merchant_pos = txn.id_merchant_pos
+			ON merch_pos.id_merchant_pos = txn.id_merchant_pos9
 		)txn_terml
 		INNER JOIN "instoDataAnalyticsDev".cc_raw_dim_plastic_card_fake card
 		ON txn_terml.id_plastic_card = card.id_plastic_card
