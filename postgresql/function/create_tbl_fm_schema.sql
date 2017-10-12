@@ -85,17 +85,12 @@ BEGIN
 	create_tbl_qry := create_tbl_qry || ')'; 
         RAISE NOTICE 'Create table query: %', create_tbl_qry;
 
-	EXECUTE create_tbl_qry;
+	--EXECUTE create_tbl_qry;
 END;
 $$
 LANGUAGE plpgsql;
 
 
-
-
---##################################
-SELECT metadata.create_tbl_fm_ext_schema('credit_card_feature', 
-'cc_features_company','metadata', 'tmp_cc_features_company');
 
 
 -- ########################
@@ -105,8 +100,13 @@ DECLARE
 	org_tbl_nm text := 'cc_features_company';
 	des_schema_name text := 'metadata';
 	des_tbl_nm text := 'tmp_cc_features_company';
+	qry text;
 BEGIN
 	EXECUTE format('SELECT metadata.create_tbl_fm_ext_schema( ''%s'', ''%s'', ''%s'', ''%s'');', 
-	org_schema_nm, org_tbl_nm, des_schema_name, des_tbl_nm);
+	org_schema_nm, org_tbl_nm, des_schema_name, des_tbl_nm) INTO qry;
+
+	RAISE NOTICE 'Query is %', qry;
+
+	EXECUTE qry;
 END;
 $$;

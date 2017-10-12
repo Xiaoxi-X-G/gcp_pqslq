@@ -168,3 +168,6 @@ $$;
 -- 		INNER JOIN insto_data_analytics_dev.cc_raw_dim_customer_fake cust
 -- 		ON txn_merch_card.id_customer = cust.id_customer
 -- )
+
+
+SELECT public.featuretable_agg_case_statement('{custage_bin, gndr, hr}', '{custage, custgndr, txn_hr}', 'sum', 'a_prchsd', 'txn','sum');
