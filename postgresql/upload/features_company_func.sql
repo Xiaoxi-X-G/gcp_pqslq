@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE FUNCTION cmpny_feature_tbl_agg(
+﻿CREATE OR REPLACE FUNCTION metadata.cmpny_feature_tbl_agg(
 	attrbt_nm_metadata_array TEXT[],
 	attrbt_type_array text[]
 ) RETURNS TEXT AS
@@ -82,15 +82,16 @@ LANGUAGE plpgsql;
 
 -- test
 --select cmpny_feature_tbl_agg(ARRAY['metadata.gndr','metadata.custage_bin'], array['gndr', 'age']);
+-- grand access permission 
 
---
+--########################################################### use query to create table 
 DO $$
 DECLARE
- func_nm text := 'cmpny_feature_tbl_agg';
+ func_nm text := 'metadata.cmpny_feature_tbl_agg';
  arg1 text[] := array['metadata.gndr', 'metadata.hr', 'metadata.dyofwk','metadata.mth','metadata.custage_bin'];
  arg2 text[] := array['gndr', 'hr', 'dyofwk','mth','age'];
 
- tbl_nm text := 'xiaoxitest';
+ tbl_nm text := 'credit_card_feature.cc_features_company';
 
  tst text := '';
 --
@@ -156,13 +157,14 @@ DECLARE
  full_qry text := '';
 BEGIN
     EXECUTE format('select %s(''%s'', ''%s'')', func_nm, arg1, arg2) INTO mid_qry;
-    RAISE NOTICE 'mid-qry: %', mid_qry;
+    --RAISE NOTICE 'mid-qry: %', mid_qry;
 
-    full_qry := pre_qry || mid_qry || post_qry;
+    full_qry := format('DROP TABLE IF EXISTS %s; CREATE TABLE %s AS(%s %s %s);',tbl_nm, tbl_nm , pre_qry, mid_qry, post_qry);
     RAISE NOTICE 'full-qry: %', full_qry;
 
-    tst := format('DROP TABLE IF EXISTS %s; CREATE TABLE %s AS( %s);' ,tbl_nm, tbl_nm ,full_qry);
-    RAISE NOTICE 'CREATE TABLE SQL: %', tst;
-    EXECUTE tst;
+    --tst := format('DROP TABLE IF EXISTS %s; CREATE TABLE %s AS( %s);' ,tbl_nm, tbl_nm ,full_qry);
+    --RAISE NOTICE 'CREATE TABLE SQL: %', tst;
+    --EXECUTE tst;
+    EXECUTE full_qry;
 END;
 $$;

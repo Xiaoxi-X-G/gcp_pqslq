@@ -44,8 +44,8 @@ BEGIN
 
 		--
 		tmp_qry := '';
-		IF attrbt_type_array[i] = 'age_bins' THEN
-		     FOR ele, ele1 in EXECUTE format('SELECT attrbt_lwr_nm, attrbt_uppr_lmt FROM %s;', attrbt_nm_metadata_array[i]) LOOP
+		IF attrbt_type_array[i] = 'age' THEN
+		     FOR ele, ele1 in EXECUTE format('SELECT attrbt_lwr_lmt, attrbt_uppr_lmt FROM %s;', attrbt_nm_metadata_array[i]) LOOP
 			 tmp_qry := format(', %s(CASE WHEN  %s.%s BETWEEN %s AND %s THEN 1*%s END) AS %s_%s_%s_%s_%s', agg_m, alias, attrbt_type_array[i], ele, ele1, agg_col_name_m, entity, attrbt_type_array[i], ele, ele1, agg_nm[m]);
 				--RAISE NOTICE 'tmp_qry: %', tmp_qry;
 
