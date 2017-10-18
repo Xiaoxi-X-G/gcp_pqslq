@@ -11,7 +11,7 @@ DECLARE
     agg_m text;
     agg_col_name_m text;
     
-    agg_col_name text := 'a_prchsd';
+    agg_col_name text[] := array['a_prchsd','id_customer'];
     alias text := 'txn_merch_cust_card';
     entity text := 'cust';    
     --attrbt_nm_metadata_array TEXT[] : ARRAY['metadata.gndr', 'metadata.hr', 'metadata.dyofwk','metadata.mth']; -- same length with attrbt_type_array
@@ -32,7 +32,7 @@ BEGIN
     	    IF agg_m = 'count' THEN
 		agg_col_name_m := '1';
 	    ELSE 
-	        agg_col_name_m := agg_col_name;
+	        agg_col_name_m := agg_col_name[1];
     	    END IF;
     
     
@@ -59,8 +59,12 @@ BEGIN
 		ELSE
 	
 		    FOR ele in EXECUTE format('SELECT attrbt_nm FROM %s;', attrbt_nm_metadata_array[i]) LOOP
-			tmp_qry := format(', %s(CASE WHEN  %s.%s = ''%s'' THEN 1*%s END) AS %s_%s_%s_%s', agg_m, alias, attrbt_type_array[i], ele, agg_col_name_m, entity, attrbt_type_array[i], ele, agg_nm[m]);
+		        IF agg_m = 'count' AND attrbt_type_array[i] = 'gndr' THEN
+			    tmp_qry := format(', %s(DISTINCT(CASE WHEN  %s.%s = ''%s'' THEN %s END)) AS %s_%s_%s_%s', agg_m, alias, attrbt_type_array[i], ele, agg_col_name[2], entity, attrbt_type_array[i], ele, agg_nm[m]);
+		        ELSE
+			    tmp_qry := format(', %s(CASE WHEN  %s.%s = ''%s'' THEN 1*%s END) AS %s_%s_%s_%s', agg_m, alias, attrbt_type_array[i], ele, agg_col_name_m, entity, attrbt_type_array[i], ele, agg_nm[m]);
 			--RAISE NOTICE 'tmp_qry: %', tmp_qry;
+                        END IF;
 
 			qry := qry || tmp_qry;
 			--RAISE NOTICE 'qry: %', qry;

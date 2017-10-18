@@ -13,7 +13,7 @@ DECLARE
     agg_col_name_m text;
     entity text;
     
-    core_tbl_nm text := 'txn_merch_cust_card';     
+    core_tbl_nm text := 'cmpny';     
     cor_tbl_entity text[] := array['cust','txn'];
     cor_tbl_attrbt text[] := array['cnt','amt'];
     
@@ -21,7 +21,7 @@ DECLARE
     attrbt_nm_metadata_array TEXT[] := ARRAY['metadata.gndr']; -- same length with attrbt_type_array
     attrbt_type_array text[] := array['gndr'];
     --
-    agg_nm text[] := array['percust','pertxn','pcn']; -- apply for all attrbt_type 
+    agg_nm text[] := array['pcn']; -- apply for all attrbt_type 
     --
     
     m int:= 1;
